@@ -1,14 +1,12 @@
-import { useState } from "react"
-import { Product, Report, Action } from "../app/types"
+import { useContext, useState } from "react"
+import { Product } from "../app/types"
 import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
+import { AppContext } from "../context/app-context"
+import products from '../app/products.json'
 
-type CreateReportProps = {
-    products: Product[],
-    setAction: (state: Action) => void,
-    addReport: (report: Report) => void
-}
+export default function CreateReport() {
+    const app = useContext(AppContext)!
 
-export default function CreateReport({ products, setAction: setState, addReport }: CreateReportProps) {
     const [product, setProduct] = useState<Product|null>(products[0])
     const [productionLine, setProductionLine] = useState<number|null>(null)
     const [totalBatches, setTotalBatches] = useState<number|null>(null)
@@ -43,17 +41,20 @@ export default function CreateReport({ products, setAction: setState, addReport 
         let requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
 
         const currentDate = new Date
-        addReport({
-            product: product,
-            line: productionLine,
-            total_batches: totalBatches,
-            finished_batches: finishedBatches,
-            total_packaging_boxes: totalPackagingBoxes,
-            total_packaging_boxes_warehouse: warehousePackagingBoxes,
-            required_packaging_boxes: requiredPackagingBoxes,
-            created_at: `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
-        })
-        setState('view_reports')
+        app.setReports([
+            {
+                product: product,
+                line: productionLine,
+                total_batches: totalBatches,
+                finished_batches: finishedBatches,
+                total_packaging_boxes: totalPackagingBoxes,
+                total_packaging_boxes_warehouse: warehousePackagingBoxes,
+                required_packaging_boxes: requiredPackagingBoxes,
+                created_at: `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
+            },
+            ...app.reports
+        ])
+        app.setAction('view_reports')
     }
 
     return (
@@ -133,7 +134,7 @@ export default function CreateReport({ products, setAction: setState, addReport 
                         Calcular
                     </button>
                     <button 
-                        onClick={() => setState('view_reports')}
+                        onClick={() => app.setAction('view_reports')}
                         type="button" 
                         className="w-full text-red-700 border border-red-700 px-4 py-2 rounded-md"
                     >

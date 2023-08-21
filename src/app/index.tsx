@@ -1,28 +1,26 @@
 import { useState } from "react"
-import {Action, Report} from './types'
+import { Action } from './types'
 import ViewReports from "../components/view-reports"
 import CreateReport from "../components/create-report"
-import products from './products.json'
 import { useReports } from "../hooks/useReports"
+import { AppContext } from "../context/app-context"
 
 export default function App() {
-    const [action, setAction] = useState<Action>('view_reports');
-    const [reports, setReports] = useReports();
-
-    const addReport = (report: Report) => {
-        setReports([report, ...reports])
-    }
+    const [action, setAction] = useState<Action>('view_reports')
+    const [reports, setReports] = useReports()
 
     return (
-        <div className='p-3 min-h-screen flex flex-col justify-center'>
-            <header className='flex gap-2 items-center justify-center'>
-                <img className="max-h-[40px] block" src="brand-icon.webp" alt="Logotipo Skala Cosméticos" />
-                <h1 className='font-medium text-2xl'>Movimentação Skala</h1>
-            </header>
-            <main>
-                {action === 'view_reports' ? <ViewReports reports={reports} setAction={setAction} setReports={setReports} /> : ''}
-                {action === 'create_report' ? <CreateReport products={products} setAction={setAction} addReport={addReport} /> : ''}
-            </main>
-        </div>
+        <AppContext.Provider value={{action, setAction, reports, setReports}}>
+            <div className='p-3 min-h-screen flex flex-col justify-center'>
+                <header className='flex gap-2 items-center justify-center'>
+                    <img className="max-h-[40px] block" src="brand-icon.webp" alt="Logotipo Skala Cosméticos" />
+                    <h1 className='font-medium text-2xl'>Movimentação Skala</h1>
+                </header>
+                <main>
+                    {action === 'view_reports' && <ViewReports />}
+                    {action === 'create_report' && <CreateReport />}
+                </main>
+            </div>
+        </AppContext.Provider>
     )
 }

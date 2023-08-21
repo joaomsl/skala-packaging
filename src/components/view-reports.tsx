@@ -1,35 +1,32 @@
 import { Trash } from '@phosphor-icons/react'
-import { Report, Action } from '../app/types'
+import { useContext } from 'react'
+import { AppContext } from '../context/app-context'
+import { Report } from '../app/types'
 
-type ViewReportsProps = {
-    reports: Report[],
-    setAction: (state: Action) => void,
-    setReports: (reports: Report[]) => void
-}
+export default function ViewReports() {
+    const app = useContext(AppContext)!
 
-export default function ViewReports({ reports, setAction: setState, setReports }: ViewReportsProps) {
-    
     const handleClickOnRemoveReportButton = (index: number, report: Report) => {
         if(!confirm(`Você realmente deseja remover o registro: Linha ${report.line}, "${report.product.name}"?`)) {
             return
         }
 
-        const reportsWithoutIndex = reports.filter(
+        const reportsWithoutIndex = app.reports.filter(
             (report, reportIndex) => reportIndex !== index 
         )
         
-        setReports(reportsWithoutIndex)
+        app.setReports(reportsWithoutIndex)
     }
 
     const handleClickOnClearReportsButton = () => {
-        if(!confirm(`Tem certeza que deseja remover todos os ${reports.length} registros?`)) {
+        if(!confirm(`Tem certeza que deseja remover todos os ${app.reports.length} registros?`)) {
             return
         }
 
-        setReports([])
+        app.setReports([])
     }
 
-    if(reports.length < 1) {
+    if(app.reports.length < 1) {
         return (
             <section className="text-center">
                 <img className="w-[70%] max-w-xs mx-auto" src="empty-box.svg" alt="Ilustração de uma caixa vazia" />
@@ -37,7 +34,7 @@ export default function ViewReports({ reports, setAction: setState, setReports }
                 <p className="mt-2 text-md text-gray-800">Gere a primeira movimentação clicando no botão abaixo:</p>
                 <button 
                     className="mt-3 w-full max-w-sm bg-green-600 text-white px-4 py-2 rounded-md"
-                    onClick={() => setState('create_report')}
+                    onClick={() => app.setAction('create_report')}
                 >
                     Novo cálculo
                 </button>
@@ -64,7 +61,7 @@ export default function ViewReports({ reports, setAction: setState, setReports }
                         </tr>
                     </thead>
                     <tbody>
-                        {reports.map((report, index) => (
+                        {app.reports.map((report, index) => (
                             <tr key={index}>
                                 <td className='border border-gray-900 p-3'>
                                     <span className='line-clamp-1'>{report.product.name}</span>
@@ -96,13 +93,13 @@ export default function ViewReports({ reports, setAction: setState, setReports }
             <div className='flex flex-col mt-3 gap-2 sm:flex-row sm:gap-4 sm:max-w-sm'>
                 <button 
                     className="w-full bg-green-600 text-white px-4 py-2 rounded-md"
-                    onClick={() => setState('create_report')}
+                    onClick={() => app.setAction('create_report')}
                 >
                     Novo cálculo
                 </button>
 
                 {
-                    reports.length > 1 ?
+                    app.reports.length > 1 ?
                     <button 
                         onClick={handleClickOnClearReportsButton}
                         type="button" 
