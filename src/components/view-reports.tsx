@@ -1,5 +1,5 @@
 import { Trash } from '@phosphor-icons/react'
-import { Report, State } from '../app'
+import { Report, State } from '../app/types'
 
 type ViewReportsProps = {
     reports: Report[],

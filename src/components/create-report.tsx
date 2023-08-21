@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Product, Report, State } from "../app"
+import { Product, Report, State } from "../app/types"
 import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
 
 type CreateReportProps = {

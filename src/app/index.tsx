@@ -1,25 +1,8 @@
 import { useEffect, useState } from "react"
+import {State, Report} from './types'
 import ViewReports from "../components/view-reports"
 import CreateReport from "../components/create-report"
 import products from './products.json'
-
-export type State = 'view_reports'|'create_report'|'edit_report'
-
-export type Product = {
-    name: string,
-    packaging: string
-}
-
-export type Report = {
-    product: Product,
-    line: number,
-    total_batches: number,
-    finished_batches: number,
-    total_packaging_boxes: number,
-    total_packaging_boxes_warehouse: number,
-    required_packaging_boxes: number,
-    created_at: string
-}
 
 export default function App() {
     const [state, setState] = useState<State>('view_reports');
