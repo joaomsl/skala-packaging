@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {Action, Report} from './types'
 import ViewReports from "../components/view-reports"
 import CreateReport from "../components/create-report"
 import products from './products.json'
+import { useReports } from "../hooks/useReports"
 
 export default function App() {
     const [action, setAction] = useState<Action>('view_reports');
-    const [reports, setReports] = useState<Report[]>(
-        JSON.parse(window.localStorage.getItem('reports') ?? '[]')
-    )
-
-    useEffect(() => {
-        window.localStorage.setItem('reports', JSON.stringify(reports))
-    }, [reports])
+    const [reports, setReports] = useReports();
 
     const addReport = (report: Report) => {
         setReports([report, ...reports])
