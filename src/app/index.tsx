@@ -24,7 +24,7 @@ export type Report = {
 export default function App() {
     const [state, setState] = useState<State>('view_reports');
     const [reports, setReports] = useState<Report[]>(
-        JSON.parse(window.localStorage.getItem('reports') ?? '{}')
+        JSON.parse(window.localStorage.getItem('reports') ?? '[]')
     )
 
     useEffect(() => {
