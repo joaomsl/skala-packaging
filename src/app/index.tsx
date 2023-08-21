@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import {State, Report} from './types'
+import {Action, Report} from './types'
 import ViewReports from "../components/view-reports"
 import CreateReport from "../components/create-report"
 import products from './products.json'
 
 export default function App() {
-    const [state, setState] = useState<State>('view_reports');
+    const [action, setAction] = useState<Action>('view_reports');
     const [reports, setReports] = useState<Report[]>(
         JSON.parse(window.localStorage.getItem('reports') ?? '[]')
     )
@@ -25,8 +25,8 @@ export default function App() {
                 <h1 className='font-medium text-2xl'>Movimentação Skala</h1>
             </header>
             <main>
-                {state === 'view_reports' ? <ViewReports reports={reports} setState={setState} setReports={setReports} /> : ''}
-                {state === 'create_report' ? <CreateReport products={products} setState={setState} addReport={addReport} /> : ''}
+                {action === 'view_reports' ? <ViewReports reports={reports} setAction={setAction} setReports={setReports} /> : ''}
+                {action === 'create_report' ? <CreateReport products={products} setAction={setAction} addReport={addReport} /> : ''}
             </main>
         </div>
     )

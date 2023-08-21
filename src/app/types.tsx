@@ -1,4 +1,4 @@
-export type State = 'view_reports'|'create_report'|'edit_report'
+export type Action = 'view_reports'|'create_report'|'edit_report'
 
 export type Product = {
     name: string,

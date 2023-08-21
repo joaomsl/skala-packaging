@@ -1,14 +1,14 @@
 import { useState } from "react"
-import { Product, Report, State } from "../app/types"
+import { Product, Report, Action } from "../app/types"
 import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
 
 type CreateReportProps = {
     products: Product[],
-    setState: (state: State) => void,
+    setAction: (state: Action) => void,
     addReport: (report: Report) => void
 }
 
-export default function CreateReport({ products, setState, addReport }: CreateReportProps) {
+export default function CreateReport({ products, setAction: setState, addReport }: CreateReportProps) {
     const [product, setProduct] = useState<Product|null>(products[0])
     const [productionLine, setProductionLine] = useState<number|null>(null)
     const [totalBatches, setTotalBatches] = useState<number|null>(null)

@@ -1,13 +1,13 @@
 import { Trash } from '@phosphor-icons/react'
-import { Report, State } from '../app/types'
+import { Report, Action } from '../app/types'
 
 type ViewReportsProps = {
     reports: Report[],
-    setState: (state: State) => void,
+    setAction: (state: Action) => void,
     setReports: (reports: Report[]) => void
 }
 
-export default function ViewReports({ reports, setState, setReports }: ViewReportsProps) {
+export default function ViewReports({ reports, setAction: setState, setReports }: ViewReportsProps) {
     
     const handleClickOnRemoveReportButton = (index: number, report: Report) => {
         if(!confirm(`Você realmente deseja remover o registro: Linha ${report.line}, "${report.product.name}"?`)) {
