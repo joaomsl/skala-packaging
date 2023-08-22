@@ -4,11 +4,14 @@ import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
 import { AppContext } from "../context/app-context"
 import products from '../app/products.json'
 import Button from "./shared/button"
+import Select from "./form/select"
+import Label from "./form/label"
+import Description from "./form/description"
 
 export default function CreateReport() {
     const app = useContext(AppContext)!
 
-    const [product, setProduct] = useState<Product|null>(products[0])
+    const [product, setProduct] = useState<Product>(products[0])
     const [productionLine, setProductionLine] = useState<number|null>(null)
     const [totalBatches, setTotalBatches] = useState<number|null>(null)
     const [finishedBatches, setFinishedBatches] = useState(0)
@@ -62,18 +65,17 @@ export default function CreateReport() {
         <section className="mt-4">
             <form className="mt-4 max-w-lg w-full mx-auto">
                 <div>
-                    <label className="text-gray-800 font-medium" htmlFor="product">Produto</label>
-                    <select 
-                        onChange={(ev) => setProduct(products[parseInt(ev.target.value)])}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all"
+                    <Label htmlFor="product">Produto</Label>
+                    <Select 
                         id="product"
+                        onChange={(ev) => setProduct(products[parseInt(ev.target.value)])}
                     >
                         {products.map((product, index) => (
                             <option value={index} key={index}>{ product.name }</option>
                         ))}
-                    </select>
+                    </Select>
 
-                    {product && <p className="mt-1 text-gray-800 text-sm">Pote utilizado: {product.packaging}</p>}
+                    {product && <Description className="mt-1">Pote utilizado: {product.packaging}</Description>}
                 </div>
                 <div className="mt-3">
                     <label className="text-gray-800 font-medium" htmlFor="line">Linha de produção</label>
@@ -121,17 +123,18 @@ export default function CreateReport() {
                         defaultValue="0" 
                         min="0" 
                     />
-                    <p className="mt-1 text-gray-800 text-sm">
+                    <Description className="mt-1">
                         Apenas relevante para essa movimentação, as outras <b>não são recalculadas.</b>
-                    </p>
+                    </Description>
                 </div>
 
                 <div className='flex flex-col mt-3 gap-2 sm:flex-row sm:gap-4'>
-                    <Button onClick={createReport}>
+                    <Button type="button" onClick={createReport}>
                         Calcular
                     </Button>
-                    
+
                     <Button 
+                        type="button"
                         color='danger' 
                         aspect='outline' 
                         onClick={() => app.setAction('view_reports')}
