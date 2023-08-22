@@ -3,6 +3,7 @@ import { Product } from "../app/types"
 import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
 import { AppContext } from "../context/app-context"
 import products from '../app/products.json'
+import Button from "./shared/button"
 
 export default function CreateReport() {
     const app = useContext(AppContext)!
@@ -126,20 +127,17 @@ export default function CreateReport() {
                 </div>
 
                 <div className='flex flex-col mt-3 gap-2 sm:flex-row sm:gap-4'>
-                    <button 
-                        onClick={createReport}
-                        type="button" 
-                        className="w-full bg-green-600 text-white px-4 py-2 rounded-md"
-                        >
+                    <Button onClick={createReport}>
                         Calcular
-                    </button>
-                    <button 
+                    </Button>
+                    
+                    <Button 
+                        color='danger' 
+                        aspect='outline' 
                         onClick={() => app.setAction('view_reports')}
-                        type="button" 
-                        className="w-full text-red-700 border border-red-700 px-4 py-2 rounded-md"
                     >
                         Cancelar
-                    </button>
+                    </Button>
                 </div>
             </form>
         </section>
