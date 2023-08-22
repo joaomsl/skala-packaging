@@ -35,7 +35,6 @@ export default function ViewReports() {
                 <p className="mt-2 text-md text-gray-800">Gere a primeira movimentação clicando no botão abaixo:</p>
                 <Button 
                     className='mt-3 max-w-sm'
-                    aspect='outline'
                     onClick={() => app.setAction('create_report')}
                 >
                     Novo cálculo
