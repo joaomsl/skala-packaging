@@ -1,15 +1,18 @@
-import { useState } from "react"
-import { Product, Report, State } from "../app"
+import { useContext, useState } from "react"
+import { Product } from "../app/types"
 import calculatePackagingBoxes from "../utils/packaging-boxes-calculator"
+import { AppContext } from "../context/app-context"
+import products from '../app/products.json'
+import Button from "./shared/button"
+import Select from "./form/select"
+import Label from "./form/label"
+import Description from "./form/description"
+import Input from "./form/input"
 
-type CreateReportProps = {
-    products: Product[],
-    setState: (state: State) => void,
-    addReport: (report: Report) => void
-}
+export default function CreateReport() {
+    const app = useContext(AppContext)!
 
-export default function CreateReport({ products, setState, addReport }: CreateReportProps) {
-    const [product, setProduct] = useState<Product|null>(products[0])
+    const [product, setProduct] = useState<Product>(products[0])
     const [productionLine, setProductionLine] = useState<number|null>(null)
     const [totalBatches, setTotalBatches] = useState<number|null>(null)
     const [finishedBatches, setFinishedBatches] = useState(0)
@@ -37,108 +40,102 @@ export default function CreateReport({ products, setState, addReport }: CreateRe
             return
         }
 
-        const totalPackagingBoxes = calculatePackagingBoxes(totalBatches)
-        const usedPackagingBoxes = finishedBatches > 0 ? calculatePackagingBoxes(finishedBatches) : 0
+        const totalPackagingBoxes = calculatePackagingBoxes(totalBatches, productionLine)
+        const usedPackagingBoxes = finishedBatches > 0 ? calculatePackagingBoxes(finishedBatches, productionLine) : 0
 
-        let requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
+        const requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
 
         const currentDate = new Date
-        addReport({
-            product: product,
-            line: productionLine,
-            total_batches: totalBatches,
-            finished_batches: finishedBatches,
-            total_packaging_boxes: totalPackagingBoxes,
-            total_packaging_boxes_warehouse: warehousePackagingBoxes,
-            required_packaging_boxes: requiredPackagingBoxes,
-            created_at: `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
-        })
-        setState('view_reports')
+        app.setReports([
+            ...app.reports,
+            {
+                product: product,
+                line: productionLine,
+                total_batches: totalBatches,
+                finished_batches: finishedBatches,
+                total_packaging_boxes: totalPackagingBoxes,
+                total_packaging_boxes_warehouse: warehousePackagingBoxes,
+                required_packaging_boxes: requiredPackagingBoxes,
+                created_at: `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
+            },
+        ])
+        app.setAction('view_reports')
     }
 
     return (
         <section className="mt-4">
             <form className="mt-4 max-w-lg w-full mx-auto">
                 <div>
-                    <label className="text-gray-800 font-medium" htmlFor="product">Produto</label>
-                    <select 
-                        onChange={(ev) => setProduct(products[parseInt(ev.target.value)])}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all"
+                    <Label htmlFor="product">Produto</Label>
+                    <Select 
                         id="product"
+                        onChange={(ev) => setProduct(products[parseInt(ev.target.value)])}
                     >
                         {products.map((product, index) => (
                             <option value={index} key={index}>{ product.name }</option>
                         ))}
-                    </select>
+                    </Select>
 
-                    {product ? <p className="mt-1 text-gray-800 text-sm">Pote utilizado: {product.packaging}</p> : ''}
+                    {product && <Description className="mt-1">Pote utilizado: {product.packaging}</Description>}
                 </div>
                 <div className="mt-3">
-                    <label className="text-gray-800 font-medium" htmlFor="line">Linha de produção</label>
-                    <input 
-                        onChange={(ev) => setProductionLine(parseInt(ev.target.value))}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <Label htmlFor="line">Linha de produção</Label>
+                    <Input 
                         id="line" 
                         type="number"
+                        onChange={(ev) => setProductionLine(parseInt(ev.target.value))}
                     />
                 </div>
 
-                <div className="flex gap-3">
-                    <div className="mt-3">
-                        <label className="text-gray-800 font-medium" htmlFor="total_batches">Total de lotes</label>
-                        <input 
-                            onChange={(ev) => setTotalBatches(parseInt(ev.target.value))}
-                            className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                <div className="flex gap-3 mt-3">
+                    <div>
+                        <Label htmlFor="total_batches">Total de lotes</Label>
+                        <Input 
                             id="total_batches" 
-                            type="number" 
+                            type="number"
                             min="1" 
+                            onChange={(ev) => setTotalBatches(parseInt(ev.target.value))}
                         />
                     </div>
-                    <div className="mt-3">
-                        <label className="text-gray-800 font-medium" htmlFor="finished_batches">Lotes finalizados</label>
-                        <input 
-                            onChange={(ev) => setFinishedBatches(parseInt(ev.target.value))}
-                            className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <div>
+                        <Label htmlFor="finished_batches">Lotes finalizados</Label>
+                        <Input 
                             id="finished_batches" 
-                            type="number" 
-                            defaultValue="0" 
+                            type="number"
+                            defaultValue={finishedBatches}
                             min="0" 
+                            onChange={(ev) => setFinishedBatches(parseInt(ev.target.value))}
                         />
                     </div>
                 </div>
 
                 <div className="mt-3">
-                    <label className="text-gray-800 font-medium" htmlFor="warehouse_packaging_boxes">
-                        Caixas de embalagens (no armazém)
-                    </label>
-                    <input 
-                        onChange={(ev) => setWarehousePackagingBoxes(parseInt(ev.target.value))}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <Label htmlFor="warehouse_packaging_boxes">Caixas de embalagens (no armazém)</Label>
+                    <Input 
                         id="warehouse_packaging_boxes" 
-                        type="number" 
-                        defaultValue="0" 
+                        type="number"
+                        defaultValue={warehousePackagingBoxes}
                         min="0" 
+                        onChange={(ev) => setWarehousePackagingBoxes(parseInt(ev.target.value))}
                     />
-                    <p className="mt-1 text-gray-800 text-sm">
+                    <Description className="mt-1">
                         Apenas relevante para essa movimentação, as outras <b>não são recalculadas.</b>
-                    </p>
+                    </Description>
                 </div>
 
                 <div className='flex flex-col mt-3 gap-2 sm:flex-row sm:gap-4'>
-                    <button 
-                        onClick={createReport}
-                        type="button" 
-                        className="w-full bg-green-600 text-white px-4 py-2 rounded-md"
-                        >
+                    <Button type="button" onClick={createReport}>
                         Calcular
-                    </button>
-                    <button 
-                        onClick={() => setState('view_reports')}
-                        type="button" 
-                        className="w-full text-red-700 border border-red-700 px-4 py-2 rounded-md"
+                    </Button>
+
+                    <Button 
+                        type="button"
+                        color='danger' 
+                        aspect='outline' 
+                        onClick={() => app.setAction('view_reports')}
                     >
                         Cancelar
-                    </button>
+                    </Button>
                 </div>
             </form>
         </section>
