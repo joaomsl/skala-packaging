@@ -2,6 +2,7 @@ import { Trash } from '@phosphor-icons/react'
 import { useContext } from 'react'
 import { AppContext } from '../context/app-context'
 import { Report } from '../app/types'
+import Button from './shared/button'
 
 export default function ViewReports() {
     const app = useContext(AppContext)!
@@ -32,12 +33,13 @@ export default function ViewReports() {
                 <img className="w-[70%] max-w-xs mx-auto" src="empty-box.svg" alt="Ilustração de uma caixa vazia" />
                 <h1 className="font-medium text-xl">Relatório vazio</h1>
                 <p className="mt-2 text-md text-gray-800">Gere a primeira movimentação clicando no botão abaixo:</p>
-                <button 
-                    className="mt-3 w-full max-w-sm bg-green-600 text-white px-4 py-2 rounded-md"
+                <Button 
+                    className='mt-3 max-w-sm'
+                    aspect='outline'
                     onClick={() => app.setAction('create_report')}
                 >
                     Novo cálculo
-                </button>
+                </Button>
             </section>
         )
     }
