@@ -7,6 +7,7 @@ import Button from "./shared/button"
 import Select from "./form/select"
 import Label from "./form/label"
 import Description from "./form/description"
+import Input from "./form/input"
 
 export default function CreateReport() {
     const app = useContext(AppContext)!
@@ -78,50 +79,44 @@ export default function CreateReport() {
                     {product && <Description className="mt-1">Pote utilizado: {product.packaging}</Description>}
                 </div>
                 <div className="mt-3">
-                    <label className="text-gray-800 font-medium" htmlFor="line">Linha de produção</label>
-                    <input 
-                        onChange={(ev) => setProductionLine(parseInt(ev.target.value))}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <Label htmlFor="line">Linha de produção</Label>
+                    <Input 
                         id="line" 
                         type="number"
+                        onChange={(ev) => setProductionLine(parseInt(ev.target.value))}
                     />
                 </div>
 
-                <div className="flex gap-3">
-                    <div className="mt-3">
-                        <label className="text-gray-800 font-medium" htmlFor="total_batches">Total de lotes</label>
-                        <input 
-                            onChange={(ev) => setTotalBatches(parseInt(ev.target.value))}
-                            className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                <div className="flex gap-3 mt-3">
+                    <div>
+                        <Label htmlFor="total_batches">Total de lotes</Label>
+                        <Input 
                             id="total_batches" 
-                            type="number" 
+                            type="number"
                             min="1" 
+                            onChange={(ev) => setTotalBatches(parseInt(ev.target.value))}
                         />
                     </div>
-                    <div className="mt-3">
-                        <label className="text-gray-800 font-medium" htmlFor="finished_batches">Lotes finalizados</label>
-                        <input 
-                            onChange={(ev) => setFinishedBatches(parseInt(ev.target.value))}
-                            className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <div>
+                        <Label htmlFor="finished_batches">Lotes finalizados</Label>
+                        <Input 
                             id="finished_batches" 
-                            type="number" 
-                            defaultValue="0" 
+                            type="number"
+                            defaultValue={finishedBatches}
                             min="0" 
+                            onChange={(ev) => setFinishedBatches(parseInt(ev.target.value))}
                         />
                     </div>
                 </div>
 
                 <div className="mt-3">
-                    <label className="text-gray-800 font-medium" htmlFor="warehouse_packaging_boxes">
-                        Caixas de embalagens (no armazém)
-                    </label>
-                    <input 
-                        onChange={(ev) => setWarehousePackagingBoxes(parseInt(ev.target.value))}
-                        className="w-full rounded-lg border-gray-300 bg-gray-200 hover:ring-green-600 hover:border-green-600 focus:ring-green-600 focus:border-green-600 transition-all" 
+                    <Label htmlFor="warehouse_packaging_boxes">Caixas de embalagens (no armazém)</Label>
+                    <Input 
                         id="warehouse_packaging_boxes" 
-                        type="number" 
-                        defaultValue="0" 
+                        type="number"
+                        defaultValue={warehousePackagingBoxes}
                         min="0" 
+                        onChange={(ev) => setWarehousePackagingBoxes(parseInt(ev.target.value))}
                     />
                     <Description className="mt-1">
                         Apenas relevante para essa movimentação, as outras <b>não são recalculadas.</b>
