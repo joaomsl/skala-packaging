@@ -40,13 +40,14 @@ export default function CreateReport() {
             return
         }
 
-        const totalPackagingBoxes = calculatePackagingBoxes(totalBatches)
-        const usedPackagingBoxes = finishedBatches > 0 ? calculatePackagingBoxes(finishedBatches) : 0
+        const totalPackagingBoxes = calculatePackagingBoxes(totalBatches, productionLine)
+        const usedPackagingBoxes = finishedBatches > 0 ? calculatePackagingBoxes(finishedBatches, productionLine) : 0
 
         const requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
 
         const currentDate = new Date
         app.setReports([
+            ...app.reports,
             {
                 product: product,
                 line: productionLine,
@@ -57,7 +58,6 @@ export default function CreateReport() {
                 required_packaging_boxes: requiredPackagingBoxes,
                 created_at: `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`
             },
-            ...app.reports
         ])
         app.setAction('view_reports')
     }
