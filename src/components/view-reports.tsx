@@ -57,8 +57,8 @@ export default function ViewReports() {
                             <HeadCell className='w-[9.37rem]'>Total de Lotes</HeadCell>
                             <HeadCell className='w-[11.25rem]'>Lotes Finalizados</HeadCell>
                             <HeadCell className='w-[14.37rem]'>Caixas de Embalagens</HeadCell>
-                            <HeadCell className='w-[14.37rem]'>Caixas de Embalagens Necessárias</HeadCell>
                             <HeadCell className='w-[14.37rem]'>Caixas de Embalagens (Armazém)</HeadCell>
+                            <HeadCell className='w-[14.37rem]'>Caixas de Embalagens Necessárias</HeadCell>
                             <HeadCell className='w-[12.5rem]'>Criado em</HeadCell>
                             <HeadCell className='w-[5rem]'>Ação</HeadCell>
                         </tr>
