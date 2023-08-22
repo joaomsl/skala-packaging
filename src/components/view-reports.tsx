@@ -14,9 +14,8 @@ export default function ViewReports() {
             return
         }
 
-        const reportsWithoutIndex = app.reports.filter(
-            (report, reportIndex) => reportIndex !== index 
-        )
+        const reportsWithoutIndex = [...app.reports]
+        reportsWithoutIndex.splice(index, 1)
         
         app.setReports(reportsWithoutIndex)
     }
