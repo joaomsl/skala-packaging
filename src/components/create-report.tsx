@@ -38,7 +38,7 @@ export default function CreateReport() {
         const totalPackagingBoxes = calculatePackagingBoxes(totalBatches)
         const usedPackagingBoxes = finishedBatches > 0 ? calculatePackagingBoxes(finishedBatches) : 0
 
-        let requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
+        const requiredPackagingBoxes = Math.max(totalPackagingBoxes - warehousePackagingBoxes - usedPackagingBoxes, 0)
 
         const currentDate = new Date
         app.setReports([
@@ -72,7 +72,7 @@ export default function CreateReport() {
                         ))}
                     </select>
 
-                    {product ? <p className="mt-1 text-gray-800 text-sm">Pote utilizado: {product.packaging}</p> : ''}
+                    {product && <p className="mt-1 text-gray-800 text-sm">Pote utilizado: {product.packaging}</p>}
                 </div>
                 <div className="mt-3">
                     <label className="text-gray-800 font-medium" htmlFor="line">Linha de produção</label>
