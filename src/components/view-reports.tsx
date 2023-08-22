@@ -92,23 +92,18 @@ export default function ViewReports() {
             </div>
 
             <div className='flex flex-col mt-3 gap-2 sm:flex-row sm:gap-4 sm:max-w-sm'>
-                <button 
-                    className="w-full bg-green-600 text-white px-4 py-2 rounded-md"
-                    onClick={() => app.setAction('create_report')}
-                >
+                <Button onClick={() => app.setAction('create_report')}>
                     Novo cálculo
-                </button>
-
+                </Button>
                 {
-                    app.reports.length > 1 ?
-                    <button 
+                    app.reports.length > 1 &&
+                    <Button
+                        color='danger'
+                        aspect='outline'
                         onClick={handleClickOnClearReportsButton}
-                        type="button" 
-                        className="w-full text-red-700 border border-red-700 px-4 py-2 rounded-md"
                     >
                         Limpar registros
-                    </button> :
-                    ''
+                    </Button>
                 }
             </div>
         </section>
